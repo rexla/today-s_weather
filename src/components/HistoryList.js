@@ -1,12 +1,34 @@
 import React from "react";
 import History from "./History";
+import { v4 } from "uuid";
 
-const HistoryList = ({ searchHistory, weatherData, cityCountry }) => {
-  console.log(searchHistory);
+const HistoryList = ({
+  searchHistory,
+  setSearchHistory,
+  setWeatherContentById,
+}) => {
+  if (searchHistory.length === 0)
+    return (
+      <div className="flex justify-center items-center mt-24 text-[#FAF089] text-2xl font-medium">
+        No Record
+      </div>
+    );
   return (
     <>
-      {searchHistory.map((item) => {
-        return <p>{item.time}</p>;
+      {searchHistory.map((item, index) => {
+        return (
+          <History
+            key={v4()}
+            city={item.city}
+            country={item.country}
+            time={item.time}
+            number={index + 1}
+            id={item.id}
+            searchHistory={searchHistory}
+            setSearchHistory={setSearchHistory}
+            setWeatherContentById={setWeatherContentById}
+          />
+        );
       })}
     </>
   );

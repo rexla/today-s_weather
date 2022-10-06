@@ -6,28 +6,30 @@ import WeatherInfo from "./components/WeatherInfo";
 import HistoryList from "./components/HistoryList";
 
 function App() {
-  const [weatherData, setWeatherData] = useState();
-  const [cityCountry, setCityCountry] = useState([{ city: "", country: "" }]);
   const [searchHistory, setSearchHistory] = useState([]);
+  const [weatherContentById, setWeatherContentById] = useState(0);
+  const [notFoundDiv, setNotFoundDiv] = useState(false);
   return (
     <div className="App">
       <Topic text="Today's Weather" />
       <InputSearch
-        setWeatherData={setWeatherData}
-        setCityCountry={setCityCountry}
+        setWeatherContentById={setWeatherContentById}
         searchHistory={searchHistory}
+        weatherContentById={weatherContentById}
         setSearchHistory={setSearchHistory}
+        notFoundDiv={notFoundDiv}
+        setNotFoundDiv={setNotFoundDiv}
       />
       <WeatherInfo
-        weatherData={weatherData}
-        cityCountry={cityCountry}
         searchHistory={searchHistory}
+        weatherContentById={weatherContentById}
+        notFoundDiv={notFoundDiv}
       />
       <Topic text="Search History" />
       <HistoryList
-        weatherData={weatherData}
-        cityCountry={cityCountry}
         searchHistory={searchHistory}
+        setSearchHistory={setSearchHistory}
+        setWeatherContentById={setWeatherContentById}
       />
     </div>
   );
