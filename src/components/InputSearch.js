@@ -13,12 +13,13 @@ const InputSearch = ({
 }) => {
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
-    let city = city_list.find((city) => city.country === data.country);
-    if (!city) {
+    let city = city_list.find((item) => item.name === data.city);
+    let country = city_list.find((item) => item.country === data.country);
+    if (!city || !country) {
       setNotFoundDiv(true);
     }
     let lat = city.coord.lat;
-    let lon = city.coord.lon;
+    let lon = country.coord.lon;
     const apiKey = key[0].apiKey;
     apiGetWeather(lat, lon, apiKey, data.city, data.country);
   };
@@ -50,6 +51,12 @@ const InputSearch = ({
         ]);
       });
   };
+  const clearButton = () => {
+    reset();
+    setSearchHistory([]);
+    setNotFoundDiv(false);
+    setWeatherContentById(0);
+  };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center mt-4 font-medium">
@@ -64,13 +71,13 @@ const InputSearch = ({
           {...register("country", { required: true })}
         />
         <input
-          className="px-2 py-0.5 bg-white rounded-md text-[#4299e1]"
+          className="px-2 py-0.5 bg-white rounded-md text-[#4299e1] cursor-pointer"
           type="submit"
           value="Search"
         />
         <button
-          onClick={() => reset()}
-          className="ml-3 px-2 py-0.5 bg-white rounded-md text-[#4299e1]"
+          onClick={() => clearButton()}
+          className="ml-3 px-2 py-0.5 bg-white rounded-md text-[#4299e1] cursor-pointer"
         >
           Clear
         </button>
