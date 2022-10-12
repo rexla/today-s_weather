@@ -30,6 +30,7 @@ function App() {
         searchHistory={searchHistory}
         setSearchHistory={setSearchHistory}
         setWeatherContentById={setWeatherContentById}
+        setNotFoundDiv={setNotFoundDiv}
       />
     </div>
   );

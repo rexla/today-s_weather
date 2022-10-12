@@ -6,6 +6,7 @@ const HistoryList = ({
   searchHistory,
   setSearchHistory,
   setWeatherContentById,
+  setNotFoundDiv,
 }) => {
   if (searchHistory.length === 0)
     return (
@@ -27,6 +28,7 @@ const HistoryList = ({
             searchHistory={searchHistory}
             setSearchHistory={setSearchHistory}
             setWeatherContentById={setWeatherContentById}
+            setNotFoundDiv={setNotFoundDiv}
           />
         );
       })}

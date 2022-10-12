@@ -11,6 +11,7 @@ const History = ({
   searchHistory,
   setSearchHistory,
   setWeatherContentById,
+  setNotFoundDiv,
 }) => {
   const deleteItem = () => {
     setSearchHistory(searchHistory.filter((item) => item.id !== id));
@@ -18,6 +19,7 @@ const History = ({
   };
   const searchItem = (id) => {
     setWeatherContentById(id);
+    setNotFoundDiv(false);
   };
   return (
     <div className="flex justify-between items-center text-white border-b-[1px] text-lg py-4 font-semibold">
