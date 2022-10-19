@@ -17,7 +17,6 @@ function App() {
         searchHistory={searchHistory}
         weatherContentById={weatherContentById}
         setSearchHistory={setSearchHistory}
-        notFoundDiv={notFoundDiv}
         setNotFoundDiv={setNotFoundDiv}
       />
       <WeatherInfo

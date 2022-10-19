@@ -8,7 +8,6 @@ const InputSearch = ({
   setSearchHistory,
   searchHistory,
   setWeatherContentById,
-  notFoundDiv,
   setNotFoundDiv,
 }) => {
   const { register, handleSubmit, reset } = useForm();
@@ -53,9 +52,8 @@ const InputSearch = ({
   };
   const clearButton = () => {
     reset();
-    setSearchHistory([]);
     setNotFoundDiv(false);
-    setWeatherContentById(0);
+    setWeatherContentById(-1);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
