@@ -3,19 +3,30 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import city_list from "../json/city_list.json";
 import key from "../json/key.json";
+import { publish } from "../customEvents/event";
 
 const InputSearch = ({
   setSearchHistory,
   searchHistory,
   setWeatherContentById,
-  setNotFoundDiv,
 }) => {
   const { register, handleSubmit, reset } = useForm();
+
+  const showNotFoundDiv = () => {
+    publish("showNotFoundDiv");
+  };
+  const hideNotFoundDiv = () => {
+    publish("hideNotFoundDiv");
+  };
+  const hideWeatherContentById = () => {
+    publish("hideWeatherContentById");
+  };
+
   const onSubmit = (data) => {
     let city = city_list.find((item) => item.name === data.city);
     let country = city_list.find((item) => item.country === data.country);
     if (!city || !country) {
-      setNotFoundDiv(true);
+      showNotFoundDiv();
     }
     let lat = city.coord.lat;
     let lon = country.coord.lon;
@@ -25,7 +36,6 @@ const InputSearch = ({
   useEffect(() => {
     if (searchHistory.length > 0) {
       setWeatherContentById(searchHistory[searchHistory.length - 1].id);
-      setNotFoundDiv(false);
     }
   }, [searchHistory]);
   const apiGetWeather = (lat, lon, apiKey, city, country) => {
@@ -34,7 +44,6 @@ const InputSearch = ({
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
       )
       .then((res) => {
-        setNotFoundDiv(false);
         console.log(res.data);
         setSearchHistory((prev) => [
           ...prev,
@@ -52,8 +61,8 @@ const InputSearch = ({
   };
   const clearButton = () => {
     reset();
-    setNotFoundDiv(false);
-    setWeatherContentById(-1);
+    hideNotFoundDiv();
+    hideWeatherContentById();
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
