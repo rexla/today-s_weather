@@ -1,15 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import city_list from "../json/city_list.json";
 import key from "../json/key.json";
 import { publish } from "../customEvents/event";
 
-const InputSearch = ({
-  setSearchHistory,
-  searchHistory,
-  setWeatherContentById,
-}) => {
+const InputSearch = () => {
   const { register, handleSubmit, reset } = useForm();
 
   const showNotFoundDiv = () => {
@@ -20,6 +16,9 @@ const InputSearch = ({
   };
   const hideWeatherContentById = () => {
     publish("hideWeatherContentById");
+  };
+  const addSearchHistory = (data, city, country) => {
+    publish("addSearchHistory", { data, city, country });
   };
 
   const onSubmit = (data) => {
@@ -33,11 +32,7 @@ const InputSearch = ({
     const apiKey = key[0].apiKey;
     apiGetWeather(lat, lon, apiKey, data.city, data.country);
   };
-  useEffect(() => {
-    if (searchHistory.length > 0) {
-      setWeatherContentById(searchHistory[searchHistory.length - 1].id);
-    }
-  }, [searchHistory]);
+
   const apiGetWeather = (lat, lon, apiKey, city, country) => {
     axios
       .get(
@@ -45,25 +40,16 @@ const InputSearch = ({
       )
       .then((res) => {
         console.log(res.data);
-        setSearchHistory((prev) => [
-          ...prev,
-          {
-            id: prev.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-            city: city,
-            country: country,
-            time: new Date().toLocaleString(res.data.timezone),
-            main: res.data.weather[0].main,
-            description: res.data.weather[0].description,
-            temperature: res.data.main,
-          },
-        ]);
+        addSearchHistory(res.data, city, country);
       });
   };
+
   const clearButton = () => {
     reset();
     hideNotFoundDiv();
     hideWeatherContentById();
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center mt-4 font-medium">
