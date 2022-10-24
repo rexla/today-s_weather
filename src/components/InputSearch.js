@@ -1,60 +1,46 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import city_list from "../json/city_list.json";
 import key from "../json/key.json";
+import { publish } from "../customEvents/event";
 
-const InputSearch = ({
-  setSearchHistory,
-  searchHistory,
-  setWeatherContentById,
-  setNotFoundDiv,
-}) => {
+const InputSearch = ({ onNotFound, onDelete, onHideWeatherContent }) => {
   const { register, handleSubmit, reset } = useForm();
+
+  const addSearchHistory = (data, city, country) => {
+    publish("addSearchHistory", { data, city, country });
+  };
+
   const onSubmit = (data) => {
     let city = city_list.find((item) => item.name === data.city);
     let country = city_list.find((item) => item.country === data.country);
     if (!city || !country) {
-      setNotFoundDiv(true);
+      onNotFound();
     }
     let lat = city.coord.lat;
     let lon = country.coord.lon;
     const apiKey = key[0].apiKey;
     apiGetWeather(lat, lon, apiKey, data.city, data.country);
   };
-  useEffect(() => {
-    if (searchHistory.length > 0) {
-      setWeatherContentById(searchHistory[searchHistory.length - 1].id);
-      setNotFoundDiv(false);
-    }
-  }, [searchHistory]);
+
   const apiGetWeather = (lat, lon, apiKey, city, country) => {
     axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
       )
       .then((res) => {
-        setNotFoundDiv(false);
         console.log(res.data);
-        setSearchHistory((prev) => [
-          ...prev,
-          {
-            id: prev.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-            city: city,
-            country: country,
-            time: new Date().toLocaleString(res.data.timezone),
-            main: res.data.weather[0].main,
-            description: res.data.weather[0].description,
-            temperature: res.data.main,
-          },
-        ]);
+        addSearchHistory(res.data, city, country);
       });
   };
+
   const clearButton = () => {
     reset();
-    setNotFoundDiv(false);
-    setWeatherContentById(-1);
+    onDelete();
+    onHideWeatherContent();
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center mt-4 font-medium">
