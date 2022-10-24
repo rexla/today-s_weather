@@ -22,9 +22,6 @@ function App() {
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
-      subscribe("showNotFoundDiv", () => setNotFoundDiv(true));
-      subscribe("hideNotFoundDiv", () => setNotFoundDiv(false));
-      subscribe("hideWeatherContentById", () => setWeatherContentById(-1));
       subscribe("addSearchHistory", (data) =>
         setSearchHistory((prev) => [
           ...prev,
@@ -49,19 +46,30 @@ function App() {
       );
 
       return () => {
-        unsubscribe("showNotFoundDiv");
-        unsubscribe("hideNotFoundDiv");
-        unsubscribe("hideWeatherContentById");
         unsubscribe("addSearchHistory");
         unsubscribe("filterSearchHistory");
         unsubscribe("showWeatherContentById");
       };
     }
   }, []);
+
+  const onNotFound = () => {
+    setNotFoundDiv(true);
+  };
+  const onDelete = () => {
+    setNotFoundDiv(false);
+  };
+  const onHideWeatherContent = () => {
+    setWeatherContentById(-1);
+  };
   return (
     <div className="App">
       <Topic text="Today's Weather" />
-      <InputSearch />
+      <InputSearch
+        onNotFound={() => onNotFound()}
+        onDelete={() => onDelete()}
+        onHideWeatherContent={() => onHideWeatherContent()}
+      />
       <WeatherInfo
         searchHistory={searchHistory}
         weatherContentById={weatherContentById}

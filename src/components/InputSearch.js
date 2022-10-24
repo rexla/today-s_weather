@@ -5,18 +5,9 @@ import city_list from "../json/city_list.json";
 import key from "../json/key.json";
 import { publish } from "../customEvents/event";
 
-const InputSearch = () => {
+const InputSearch = ({ onNotFound, onDelete, onHideWeatherContent }) => {
   const { register, handleSubmit, reset } = useForm();
 
-  const showNotFoundDiv = () => {
-    publish("showNotFoundDiv");
-  };
-  const hideNotFoundDiv = () => {
-    publish("hideNotFoundDiv");
-  };
-  const hideWeatherContentById = () => {
-    publish("hideWeatherContentById");
-  };
   const addSearchHistory = (data, city, country) => {
     publish("addSearchHistory", { data, city, country });
   };
@@ -25,7 +16,7 @@ const InputSearch = () => {
     let city = city_list.find((item) => item.name === data.city);
     let country = city_list.find((item) => item.country === data.country);
     if (!city || !country) {
-      showNotFoundDiv();
+      onNotFound();
     }
     let lat = city.coord.lat;
     let lon = country.coord.lon;
@@ -46,8 +37,8 @@ const InputSearch = () => {
 
   const clearButton = () => {
     reset();
-    hideNotFoundDiv();
-    hideWeatherContentById();
+    onDelete();
+    onHideWeatherContent();
   };
 
   return (
