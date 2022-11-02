@@ -1,19 +1,10 @@
 import React from "react";
 import History from "./History";
 import { v4 } from "uuid";
+import { NoRecord } from "./template/NoRecord";
 
-const HistoryList = ({
-  searchHistory,
-  setSearchHistory,
-  setWeatherContentById,
-  setNotFoundDiv,
-}) => {
-  if (searchHistory.length === 0)
-    return (
-      <div className="flex justify-center items-center mt-24 text-[#FAF089] text-2xl font-medium">
-        No Record
-      </div>
-    );
+const HistoryList = ({ searchHistory, onDelete, onDisplay, onUpdate }) => {
+  if (searchHistory.length === 0) return <NoRecord />;
   return (
     <>
       {searchHistory.map((item, index) => {
@@ -26,9 +17,9 @@ const HistoryList = ({
             number={index + 1}
             id={item.id}
             searchHistory={searchHistory}
-            setSearchHistory={setSearchHistory}
-            setWeatherContentById={setWeatherContentById}
-            setNotFoundDiv={setNotFoundDiv}
+            onDelete={onDelete}
+            onDisplay={onDisplay}
+            onUpdate={onUpdate}
           />
         );
       })}

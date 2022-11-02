@@ -5,38 +5,40 @@ import city_list from "../json/city_list.json";
 import key from "../json/key.json";
 
 const InputSearch = ({
-  setSearchHistory,
   searchHistory,
-  setWeatherContentById,
-  setNotFoundDiv,
+  weatherContentById,
+  onNotFound,
+  onDelete,
+  onDisplay,
+  onUpdate,
 }) => {
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
     let city = city_list.find((item) => item.name === data.city);
     let country = city_list.find((item) => item.country === data.country);
     if (!city || !country) {
-      setNotFoundDiv(true);
+      onNotFound();
     }
     let lat = city.coord.lat;
     let lon = country.coord.lon;
     const apiKey = key[0].apiKey;
     apiGetWeather(lat, lon, apiKey, data.city, data.country);
   };
+
   useEffect(() => {
-    if (searchHistory.length > 0) {
-      setWeatherContentById(searchHistory[searchHistory.length - 1].id);
-      setNotFoundDiv(false);
-    }
+    if (searchHistory.length > 0 && weatherContentById !== -1)
+      onDisplay(searchHistory[searchHistory.length - 1].id);
   }, [searchHistory]);
+
   const apiGetWeather = (lat, lon, apiKey, city, country) => {
     axios
       .get(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
       )
       .then((res) => {
-        setNotFoundDiv(false);
         console.log(res.data);
-        setSearchHistory((prev) => [
+        onDelete();
+        onUpdate((prev) => [
           ...prev,
           {
             id: prev.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
@@ -48,12 +50,13 @@ const InputSearch = ({
             temperature: res.data.main,
           },
         ]);
+        onDisplay(searchHistory[searchHistory.length - 1].id);
       });
   };
   const clearButton = () => {
     reset();
-    setNotFoundDiv(false);
-    setWeatherContentById(-1);
+    onDelete();
+    onDisplay(-1);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

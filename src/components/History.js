@@ -9,17 +9,17 @@ const History = ({
   number,
   id,
   searchHistory,
-  setSearchHistory,
-  setWeatherContentById,
-  setNotFoundDiv,
+  onDelete,
+  onDisplay,
+  onUpdate,
 }) => {
   const deleteItem = () => {
-    setSearchHistory(searchHistory.filter((item) => item.id !== id));
-    setWeatherContentById(-1);
+    onUpdate(searchHistory.filter((item) => item.id !== id));
+    onDisplay(-1);
   };
   const searchItem = (id) => {
-    setWeatherContentById(id);
-    setNotFoundDiv(false);
+    onDisplay(id);
+    onDelete();
   };
   return (
     <div className="flex justify-between items-center text-white border-b-[1px] text-lg py-4 font-semibold">

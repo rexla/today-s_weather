@@ -1,17 +1,12 @@
 import React from "react";
+import { NotFound } from "./template/NotFound";
 
 const WeatherInfo = ({ searchHistory, weatherContentById, notFoundDiv }) => {
   const weatherArray = searchHistory.find(
     (item) => item.id === weatherContentById
   );
   if (notFoundDiv) {
-    return (
-      <div className="h-20 pt-2">
-        <div className="p-2 text-white bg-[#E53E3E] rounded-md border-[#FAF089] border-[1px]">
-          Not Found
-        </div>
-      </div>
-    );
+    return <NotFound />;
   } else if (searchHistory.length === 0 || weatherContentById === -1)
     return <div className="h-20"></div>;
   return (
