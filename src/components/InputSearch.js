@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import city_list from "../json/city_list.json";
-import key from "../json/key.json";
 
 const InputSearch = ({
   searchHistory,
@@ -11,6 +10,7 @@ const InputSearch = ({
   onDelete,
   onDisplay,
   onUpdate,
+  OnIncrement,
 }) => {
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
@@ -21,7 +21,7 @@ const InputSearch = ({
     }
     let lat = city.coord.lat;
     let lon = country.coord.lon;
-    const apiKey = key[0].apiKey;
+    const apiKey = "942a76b3621b5509ab6299f3a8ad41a6";
     apiGetWeather(lat, lon, apiKey, data.city, data.country);
   };
 
@@ -50,7 +50,9 @@ const InputSearch = ({
             temperature: res.data.main,
           },
         ]);
-        onDisplay(searchHistory[searchHistory.length - 1].id);
+        // onDisplay(searchHistory[searchHistory.length - 1].id);
+        reset();
+        OnIncrement();
       });
   };
   const clearButton = () => {

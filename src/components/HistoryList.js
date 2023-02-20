@@ -3,7 +3,13 @@ import History from "./History";
 import { v4 } from "uuid";
 import { NoRecord } from "./template/NoRecord";
 
-const HistoryList = ({ searchHistory, onDelete, onDisplay, onUpdate }) => {
+const HistoryList = ({
+  searchHistory,
+  onDelete,
+  onDisplay,
+  onUpdate,
+  OnDecrement,
+}) => {
   if (searchHistory.length === 0) return <NoRecord />;
   return (
     <>
@@ -20,6 +26,7 @@ const HistoryList = ({ searchHistory, onDelete, onDisplay, onUpdate }) => {
             onDelete={onDelete}
             onDisplay={onDisplay}
             onUpdate={onUpdate}
+            OnDecrement={OnDecrement}
           />
         );
       })}

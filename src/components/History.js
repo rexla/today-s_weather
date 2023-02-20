@@ -12,10 +12,12 @@ const History = ({
   onDelete,
   onDisplay,
   onUpdate,
+  OnDecrement,
 }) => {
   const deleteItem = () => {
     onUpdate(searchHistory.filter((item) => item.id !== id));
     onDisplay(-1);
+    OnDecrement();
   };
   const searchItem = (id) => {
     onDisplay(id);
